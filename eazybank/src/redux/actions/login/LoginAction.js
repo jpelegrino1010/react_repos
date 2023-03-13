@@ -1,8 +1,10 @@
 import * as types from '../types';
+import {getAuthentication} from '../../../services/auth-service'
 
-const loginSuccess=()=> {
+const loginSuccess=(user)=> {
     return {
-        type: types.types.LOGIN_SUCCESS        
+        type: types.types.LOGIN_SUCCESS,
+        user        
     }
     
 }
@@ -14,15 +16,20 @@ const loginError=()=> {
 }
 
 export const login=(user)=> {
-    return dispatch=> {
-        return new Promise((resolve,reject)=>{
-            if(user.username) {
-                dispatch(loginSuccess());
-                resolve('You has login successful');
-            }else{
-                dispatch(loginError());
-                reject('Fail to login');
-            }
-        })
+    return async dispatch=> {
+        const login= async ()=> {
+            const response= await getAuthentication(user);
+
+            return response.data;
+        };
+
+        try {
+            const userData=await login();
+            localStorage.setItem('user',JSON.stringify(userData));
+            dispatch(loginSuccess(userData));
+        } catch (err) {
+           dispatch(loginError());
+            
+        }
     }
 }

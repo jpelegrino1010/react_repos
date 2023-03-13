@@ -1,11 +1,22 @@
-import React,{useState} from  'react'
+import React,{useState,useEffect} from  'react'
 import { connect } from 'react-redux';
 import classes from './login.module.css';
-import {login} from '../../redux/actions/login/LoginAction'
+import {login} from '../../redux/actions/login/LoginAction';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const Login=(props)=> {
     const [user,setUser]=useState({username:'',password:''});
+    const {isLogin}=props;
+    const navigate=useNavigate();
+    
+
+    useEffect(()=> {
+        if(isLogin) {
+           navigate('/home');
+        }
+    },[isLogin])
 
     const inputChangeHandler=e=> {
         const {name,value}=e.target;
@@ -49,7 +60,8 @@ const Login=(props)=> {
 
 const mapPropsToState=state=> {
     return {
-        isLogin:state.isLogin
+        isLogin:state.loginReducer.isLogin || false,
+        
     }
 };
 
