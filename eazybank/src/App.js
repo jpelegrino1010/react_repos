@@ -3,6 +3,7 @@ import { RouterProvider,createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import Accounts from './components/accounts/accounts';
 import Cards from './components/cards/cards';
+import Customer from './components/customer/customer';
 import Home from './components/home/Home';
 import Loans from './components/loans/loans';
 import Login from './components/login/Login';
@@ -16,7 +17,8 @@ const router=createBrowserRouter([
   {path:'/loans',element:<Loans/>},
   {path:'/accounts',element:<Accounts/>},
   {path:'/cards',element:<Cards/>},
-  {path:'/logout',element:<Logout/>}
+  {path:'/logout',element:<Logout/>},
+  {path:'/register',element:<Customer/>}
 ])
 
 function App() {

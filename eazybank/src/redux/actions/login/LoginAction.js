@@ -1,5 +1,7 @@
 import * as types from '../types';
-import {getAuthentication} from '../../../services/auth-service'
+import {getAuthentication,setupAxiosInter} from '../../../services/auth-service';
+import Cookies from 'js-cookie';
+
 
 const loginSuccess=(user)=> {
     return {
@@ -16,16 +18,18 @@ const loginError=()=> {
 }
 
 export const login=(user)=> {
+    
     return async dispatch=> {
         const login= async ()=> {
-            const response= await getAuthentication(user);
-
+            const response= await getAuthentication(user);                        
             return response.data;
         };
 
         try {
             const userData=await login();
-            localStorage.setItem('user',JSON.stringify(userData));
+            var csrf = Cookies.get('XSRF-TOKEN');
+            settingBasicHeader(user);            
+            localStorage.setItem('XSRF-TOKEN',csrf);
             dispatch(loginSuccess(userData));
         } catch (err) {
            dispatch(loginError());
@@ -33,3 +37,9 @@ export const login=(user)=> {
         }
     }
 }
+
+const settingBasicHeader=(user)=> {
+    const basicAuthHeader= 'Basic '+ window.btoa(`${user.username}:${user.password}`);
+    localStorage.setItem('basicHeader',basicAuthHeader);
+     return basicAuthHeader;
+  }
