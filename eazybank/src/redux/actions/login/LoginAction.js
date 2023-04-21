@@ -21,12 +21,14 @@ export const login=(user)=> {
     
     return async dispatch=> {
         const login= async ()=> {
-            const response= await getAuthentication(user);                        
+            const response= await getAuthentication(user);    
+            localStorage.setItem("Authorization",response.headers.get("Authorization"))                    
             return response.data;
         };
 
         try {
             const userData=await login();
+           
             var csrf = Cookies.get('XSRF-TOKEN');
             settingBasicHeader(user);            
             localStorage.setItem('XSRF-TOKEN',csrf);
